@@ -6,34 +6,46 @@
 </head>
 <body>
 	<div id="app">
-		<input v-model="newTodo" v-on:keyup.enter="addTodo">
+		<hr>
 		<ul>
-			<li v-for="todo in todos">
-				<span>{{ todo.text }}</span>
-				<button v-on:click="removeTodo($index)">X</button>
+			<li v-for="contact in contacts">
+				<strong>{{contact.nombre}}</strong> <i>{{contact.correo}}</i><button v-on:click="showFullData(contact)">Full Data</button>
 			</li>
 		</ul>
+		<hr>
 	</div>
 	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="node_modules/vue-resource/dist/vue-resource.js"></script>
 	<script type="text/javascript">
 		new Vue({
 			el: '#app',
 			data: {
-				newTodo: '',
-				todos: [
-					{ text: 'Todo Dummy' }
-				]
+				contacts: {}
 			},
-			methods: {
-				addTodo: function () {
-					var text = this.newTodo.trim()
-					if (text) {
-						this.todos.push({ text: text })
-						this.newTodo = ''
-					}
-				},
-				removeTodo: function (index) {
-					this.todos.splice(index, 1)
+			created: function () {
+				this.$http
+					.get('https://jsonplaceholder.typicode.com/users')
+					.then(function (response){
+						this.contacts = response.body.map(function(row){
+							return{
+								id: row.id,
+								nombre: row.name,
+								correo: row.email,
+								telefono: row.phone,
+								paginaweb: row.website,
+								empresa: row.company.name
+							}
+						});
+					});
+			},
+			methods:{
+				showFullData: function(data){
+					alert("id: "+data.id+"\n"+
+						"nombre: "+data.nombre+"\n"+
+						"correo: "+data.correo+"\n"+
+						"telefono: "+data.telefono+"\n"+
+						"paginaweb: "+data.paginaweb+"\n"+
+						"empresa: "+data.empresa);
 				}
 			}
 		})
