@@ -9,10 +9,54 @@
 		<hr>
 		<ul>
 			<li v-for="contact in contacts">
-				<strong>{{contact.nombre}}</strong> <i>{{contact.correo}}</i><button v-on:click="showFullData(contact)">Full Data</button>
+				<strong>{{contact.nombre}}</strong> <i>{{contact.correo}}</i><button v-on:click="displayFullData(contact)">Full Data</button>
 			</li>
 		</ul>
 		<hr>
+		<div v-if="contactSelected">
+			<fieldset>
+				<legend style="text-align:center">
+					{{contactSelected.nombre}}
+				</legend>
+				<table>
+					<tr>
+						<td>Correo: </td>
+						<td>{{contactSelected.correo}}</td>
+					</tr>
+					<tr>
+						<td>Telefono: </td>
+						<td>{{contactSelected.telefono}}</td>
+					</tr>
+					<tr>
+						<td>Paginaweb: </td>
+						<td>{{contactSelected.paginaweb}}</td>
+					</tr>
+					<tr>
+						<td>Empresa: </td>
+						<td>{{contactSelected.empresa}}</td>
+					</tr>
+				</table>
+			</fieldset>
+			<hr>
+			<div v-if="contactSelected.publicaciones">
+				<div v-for="post in contactSelected.publicaciones" style="border:2px solid grey;margin-bottom:5px;">
+					<h5 style="padding:0px; margin:0px;">{{ post.title }}</h5>
+					<p style="margin:0px;">
+						{{post.body}}
+					</p>
+				</div>
+			</div>
+			<div v-else>
+				<fieldset>
+					<legend>Post Not Found</legend>
+					<p>El usuario no ha publicado nada</p>
+				</fieldset>
+			</div>
+			<hr>
+		</div>
+		<pre>
+			{{ $data | json }}
+		</pre>
 	</div>
 	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="node_modules/vue-resource/dist/vue-resource.js"></script>
@@ -20,7 +64,8 @@
 		new Vue({
 			el: '#app',
 			data: {
-				contacts: {}
+				contacts: {},
+				contactSelected: null
 			},
 			created: function () {
 				this.$http
@@ -33,19 +78,27 @@
 								correo: row.email,
 								telefono: row.phone,
 								paginaweb: row.website,
-								empresa: row.company.name
+								empresa: row.company.name,
+								publicaciones: {}
 							}
 						});
 					});
+				/*this
+				.$http
+				.get('https://jsonplaceholder.typicode.com/posts')
+				.then(function (response){
+					this.posts = response.body;
+				});*/
 			},
 			methods:{
-				showFullData: function(data){
-					alert("id: "+data.id+"\n"+
-						"nombre: "+data.nombre+"\n"+
-						"correo: "+data.correo+"\n"+
-						"telefono: "+data.telefono+"\n"+
-						"paginaweb: "+data.paginaweb+"\n"+
-						"empresa: "+data.empresa);
+				displayFullData: function(data){
+					this.contactSelected = data;
+					this
+					.$http
+					.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
+					.then(function (response){
+						this.contactSelected.publicaciones = response.body;
+					});
 				}
 			}
 		})
