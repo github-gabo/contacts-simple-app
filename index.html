@@ -6,19 +6,43 @@
 </head>
 <body>
 	<div id="app">
+		<table>
+			<tr>
+				<td>Nombre: </td>
+				<td><input type="text" v-model="newContact.nombre"></td>
+			</tr>
+			<tr>
+				<td>Correo: </td>
+				<td><input type="text" v-model="newContact.correo"></td>
+			</tr>
+			<tr>
+				<td>Telefono: </td>
+				<td><input type="text" v-model="newContact.telefono"></td>
+			</tr>
+			<tr>
+				<td>Paginaweb: </td>
+				<td><input type="text" v-model="newContact.paginaweb"></td>
+			</tr>
+			<tr>
+				<td>Empresa: </td>
+				<td><input type="text" v-model="newContact.empresa"></td>
+			</tr>
+		</table>
+		<button v-if="newContact!=null" v-on:click="createContact(lastID)">Agregar Contacto</button>
 		<hr>
 		<ul>
-			<li v-for="contact in contacts">
-				<strong>{{contact.nombre}}</strong> <i>{{contact.correo}}</i><button v-on:click="displayFullData(contact)">Full Data</button>
+			<li v-for="contact in contacts" style="margin:8px;">
+				<button v-on:click="deleteContact($index)">X</button> <strong>{{contact.nombre}}</strong> <i>{{contact.correo}}</i><button v-on:click="readContact(contact)">Display Data</button>
 			</li>
 		</ul>
 		<hr>
-		<div v-if="contactSelected">
+		<div v-if="contactSelected!=null">
 			<fieldset>
-				<legend style="text-align:center">
-					{{contactSelected.nombre}}
-				</legend>
 				<table>
+					<tr>
+						<td>Nombre: </td>
+						<td>{{contactSelected.nombre}}</td>
+					</tr>
 					<tr>
 						<td>Correo: </td>
 						<td>{{contactSelected.correo}}</td>
@@ -38,13 +62,13 @@
 				</table>
 			</fieldset>
 			<hr>
-			<div v-if="contactSelected.publicaciones">
-				<div v-for="post in contactSelected.publicaciones" style="border:2px solid grey;margin-bottom:5px;">
-					<h5 style="padding:0px; margin:0px;">{{ post.title }}</h5>
+			<div v-if="contactSelected.publicaciones.length > 0">
+				<fieldset v-for="post in contactSelected.publicaciones" style="border:2px solid grey;margin-bottom:5px;">
+					<legend style="padding:0px; margin:0px;"><strong>{{ post.title }}</strong></legend>
 					<p style="margin:0px;">
 						{{post.body}}
 					</p>
-				</div>
+				</fieldset>
 			</div>
 			<div v-else>
 				<fieldset>
@@ -65,40 +89,73 @@
 			el: '#app',
 			data: {
 				contacts: {},
+				updating: false,
+				newContact: null,
 				contactSelected: null
 			},
-			created: function () {
-				this.$http
-					.get('https://jsonplaceholder.typicode.com/users')
-					.then(function (response){
-						this.contacts = response.body.map(function(row){
-							return{
-								id: row.id,
-								nombre: row.name,
-								correo: row.email,
-								telefono: row.phone,
-								paginaweb: row.website,
-								empresa: row.company.name,
-								publicaciones: {}
+			computed:{
+				lastID: function(){
+					var mayor;
+					for(i=0; i<this.contacts.length; i++){
+						if(i==0){
+							mayor = this.contacts[i].id
+						}else{
+							if(mayor < this.contacts[i].id){
+								mayor = this.contacts[i].id;
 							}
-						});
-					});
-				/*this
-				.$http
-				.get('https://jsonplaceholder.typicode.com/posts')
+						}
+					}
+					return mayor+1;
+				}
+			},
+			created: function () {
+				this.$http.get('https://jsonplaceholder.typicode.com/users')
 				.then(function (response){
-					this.posts = response.body;
-				});*/
+					this.contacts = response.body.map(function(row){
+						return{
+							id: row.id,
+							nombre: row.name,
+							correo: row.email,
+							telefono: row.phone,
+							paginaweb: row.website,
+							empresa: row.company.name,
+							publicaciones: []
+						}
+					});
+				});
 			},
 			methods:{
-				displayFullData: function(data){
+				save: function(data){
+					this.contacts.push(data);
+					return true;
+				},
+				createContact: function(id){
+					var data = {
+						id: id,
+						nombre: this.newContact.nombre,
+						correo: this.newContact.correo,
+						telefono: this.newContact.telefono,
+						paginaweb: this.newContact.paginaweb,
+						empresa: this.newContact.empresa,
+						publicaciones: []
+					}
+					if(this.save(data))
+						this.newContact = null;
+					else{
+						alert("Hubo un error");
+					}
+				},
+				readContact: function(data){
 					this.contactSelected = data;
-					this
-					.$http
-					.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
-					.then(function (response){
-						this.contactSelected.publicaciones = response.body;
-					});
+					if(this.contactSelected.publicaciones.length <= 0){
+						this.$http.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
+						.then(function (response){
+							this.contactSelected.publicaciones = response.body;
+						});
+					}
+				},
+				deleteContact: function(index){
+					this.contacts.splice(index,1);
 				}
 			}
 		})
