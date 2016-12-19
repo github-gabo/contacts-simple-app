@@ -3,10 +3,117 @@
 <head>
 	<title>Directorio Telefónico</title>
 	<link rel="icon" href="logo.png" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 </head>
-<body>
-	<div id="app">
-		<table>
+<body id="app">
+	<nav class="navbar navbar-inverse  navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">
+					<img alt="Directorio Telefonico" src="logo.png" class="img-responsive" style="width:20px; height:20px;">
+				</a>
+			</div>
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Directorio Telefonico</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+				<li><a href="#">Link</a></li>
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">One more separated link</a></li>
+					</ul>
+					</li>
+				</ul>
+				<form class="navbar-form navbar-left">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#">Link</a></li>
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li role="separator" class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+					</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4" style="max-height:550px;overflow-y:scroll;">
+				<div class="panel panel-default">
+					<div class="panel-heading">Contactos</div>
+					<div class="panel-body" style="padding:1px !important;">
+						<div class="list-group" style="margin:0px;">
+							<a v-on:click="readContact(contact)" class="list-group-item" v-for="contact in contacts">
+								<h4 class="list-group-item-heading">{{contact.nombre}}</h4>
+								<p class="list-group-item-text">
+									<button v-on:click="deleteContact($index)">X</button>
+									<i>{{contact.correo}}</i>
+								</p>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div id="lista">
+				</div>
+			</div>
+			<div class="col-md-8"  v-if="contactSelected!=null">
+				<div class="row">
+					<div class="col-md-6">
+						<h2>{{contactSelected.nombre}}</h2>
+						<ul class="list-group">
+							<li class="list-group-item">{{contactSelected.correo}}</li>
+							<li class="list-group-item">{{contactSelected.telefono}}</li>
+							<li class="list-group-item">{{contactSelected.paginaweb}}</li>
+							<li class="list-group-item">{{contactSelected.empresa}}</li>
+						</ul>
+					</div>
+					<div class="col-md-6">
+						<div v-if="contactSelected.publicaciones.length > 0">
+							<fieldset v-for="post in contactSelected.publicaciones">
+								<legend>{{ post.title }}</legend>
+								<p>
+									{{post.body}}
+								</p>
+							</fieldset>
+						</div>
+						<div v-else>
+							<fieldset>
+								<legend>Post Not Found</legend>
+								<p>El usuario no ha publicado nada</p>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<table>
 			<tr>
 				<td>Nombre: </td>
 				<td><input type="text" v-model="newContact.nombre"></td>
@@ -29,136 +136,15 @@
 			</tr>
 		</table>
 		<button v-if="newContact!=null" v-on:click="createContact(lastID)">Agregar Contacto</button>
-		<hr>
-		<ul>
-			<li v-for="contact in contacts" style="margin:8px;">
-				<button v-on:click="deleteContact($index)">X</button> <strong>{{contact.nombre}}</strong> <i>{{contact.correo}}</i><button v-on:click="readContact(contact)">Display Data</button>
-			</li>
-		</ul>
-		<hr>
-		<div v-if="contactSelected!=null">
-			<fieldset>
-				<table>
-					<tr>
-						<td>Nombre: </td>
-						<td>{{contactSelected.nombre}}</td>
-					</tr>
-					<tr>
-						<td>Correo: </td>
-						<td>{{contactSelected.correo}}</td>
-					</tr>
-					<tr>
-						<td>Telefono: </td>
-						<td>{{contactSelected.telefono}}</td>
-					</tr>
-					<tr>
-						<td>Paginaweb: </td>
-						<td>{{contactSelected.paginaweb}}</td>
-					</tr>
-					<tr>
-						<td>Empresa: </td>
-						<td>{{contactSelected.empresa}}</td>
-					</tr>
-				</table>
-			</fieldset>
-			<hr>
-			<div v-if="contactSelected.publicaciones.length > 0">
-				<fieldset v-for="post in contactSelected.publicaciones" style="border:2px solid grey;margin-bottom:5px;">
-					<legend style="padding:0px; margin:0px;"><strong>{{ post.title }}</strong></legend>
-					<p style="margin:0px;">
-						{{post.body}}
-					</p>
-				</fieldset>
-			</div>
-			<div v-else>
-				<fieldset>
-					<legend>Post Not Found</legend>
-					<p>El usuario no ha publicado nada</p>
-				</fieldset>
-			</div>
-			<hr>
-		</div>
-		<pre>
+		<hr>-->
+		<!--<pre>
 			{{ $data | json }}
-		</pre>
+		</pre>-->
 	</div>
 	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="node_modules/vue-resource/dist/vue-resource.js"></script>
-	<script type="text/javascript">
-		new Vue({
-			el: '#app',
-			data: {
-				contacts: {},
-				updating: false,
-				newContact: null,
-				contactSelected: null
-			},
-			computed:{
-				lastID: function(){
-					var mayor;
-					for(i=0; i<this.contacts.length; i++){
-						if(i==0){
-							mayor = this.contacts[i].id
-						}else{
-							if(mayor < this.contacts[i].id){
-								mayor = this.contacts[i].id;
-							}
-						}
-					}
-					return mayor+1;
-				}
-			},
-			created: function () {
-				this.$http.get('https://jsonplaceholder.typicode.com/users')
-				.then(function (response){
-					this.contacts = response.body.map(function(row){
-						return{
-							id: row.id,
-							nombre: row.name,
-							correo: row.email,
-							telefono: row.phone,
-							paginaweb: row.website,
-							empresa: row.company.name,
-							publicaciones: []
-						}
-					});
-				});
-			},
-			methods:{
-				save: function(data){
-					this.contacts.push(data);
-					return true;
-				},
-				createContact: function(id){
-					var data = {
-						id: id,
-						nombre: this.newContact.nombre,
-						correo: this.newContact.correo,
-						telefono: this.newContact.telefono,
-						paginaweb: this.newContact.paginaweb,
-						empresa: this.newContact.empresa,
-						publicaciones: []
-					}
-					if(this.save(data))
-						this.newContact = null;
-					else{
-						alert("Hubo un error");
-					}
-				},
-				readContact: function(data){
-					this.contactSelected = data;
-					if(this.contactSelected.publicaciones.length <= 0){
-						this.$http.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
-						.then(function (response){
-							this.contactSelected.publicaciones = response.body;
-						});
-					}
-				},
-				deleteContact: function(index){
-					this.contacts.splice(index,1);
-				}
-			}
-		})
-	</script>
+	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>
