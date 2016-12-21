@@ -67,10 +67,15 @@
 		<div class="row">
 			<div class="col-md-4" style="max-height:550px;overflow-y:scroll;">
 				<div class="panel panel-default">
-					<div class="panel-heading">Contactos</div>
+					<div class="panel-heading">
+						Contactos
+					</div>
+					<div class="form-group" style="margin:5px;">
+						<input type="text" class="form-control" v-model="searchString">
+					</div>
 					<div class="panel-body" style="padding:1px !important;">
 						<div class="list-group" style="margin:0px;">
-							<a v-on:click="readContact(contact)" class="list-group-item" v-for="contact in contacts">
+							<a v-on:click="readContact(contact)" class="list-group-item" v-for="contact in filteredContacts">
 								<h4 class="list-group-item-heading">{{contact.nombre}}</h4>
 								<p class="list-group-item-text">
 									<button v-on:click="deleteContact($index)">X</button>
@@ -83,7 +88,7 @@
 				<div id="lista">
 				</div>
 			</div>
-			<div class="col-md-8"  v-if="contactSelected!=null">
+			<div class="col-md-8" v-if="contactSelected!=null">
 				<div class="row">
 					<div class="col-md-6">
 						<h2>{{contactSelected.nombre}}</h2>
@@ -110,6 +115,16 @@
 							</fieldset>
 						</div>
 					</div>
+				</div>
+			</div>
+			<div class="col-md-8" v-else>
+				<div class="jumbotron text-center">
+					<img src="http://vue-newsletter.com/vue-newsletter.png" class="img-responsive">
+					<h2>{{messagePrimary}}</h2>
+					<p>Una simple aplicación con Vue.js, <br>usando <a target="_blank" class="label label-primary" href="http://getbootstrap.com/">Bootstrap</a> + <a target="_blank" class="label label-primary" href="https://www.npmjs.com/package/vue-resource">vue-resource</a> + <a target="_blank" class="label label-primary" href="https://jsonplaceholder.typicode.com/">JSONPlaceholder</a></p>
+					<p>
+						<a target="_blank" class="btn btn-success btn-lg" href="https://github.com/github-gabo/contacts-simple-app" role="button">Repositorio</a>
+					</p>
 				</div>
 			</div>
 		</div>

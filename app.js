@@ -1,6 +1,8 @@
 new Vue({
 	el: '#app',
 	data: {
+		messagePrimary: "Directorio Telefónico",
+		searchString: "",
 		contacts: {},
 		updating: false,
 		newContact: null,
@@ -19,6 +21,21 @@ new Vue({
 				}
 			}
 			return mayor+1;
+		},
+		filteredContacts: function(){
+			var contacts_array = this.contacts,
+                searchString = this.searchString;
+            if(!searchString){
+                return contacts_array;
+            }
+            searchString = searchString.trim().toLowerCase();
+            contacts_array = contacts_array.filter(function(item){
+                if(item.nombre.toLowerCase().indexOf(searchString) !== -1){
+                    return item;
+                }
+            })
+            // Return an array with the filtered data.
+            return contacts_array;
 		}
 	},
 	created: function () {
