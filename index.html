@@ -25,20 +25,20 @@
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-				<li><a href="#">Link</a></li>
-				<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Separated link</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">One more separated link</a></li>
-					</ul>
+				<!--<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+					<li><a href="#">Link</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Separated link</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul>
 					</li>
 				</ul>
 				<form class="navbar-form navbar-left">
@@ -46,20 +46,20 @@
 						<input type="text" class="form-control" placeholder="Search">
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
-				</form>
-				<ul class="nav navbar-nav navbar-right">
+				</form>-->
+				<!--<ul class="nav navbar-nav navbar-right">
 					<li><a href="#">Link</a></li>
 					<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Separated link</a></li>
-					</ul>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
 					</li>
-				</ul>
+				</ul>-->
 			</div><!-- /.navbar-collapse -->
 		</div><!-- /.container-fluid -->
 	</nav>
@@ -68,7 +68,7 @@
 			<div class="col-md-4" style="max-height:550px;overflow-y:scroll;">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Contactos
+						Contactos <button type="button" class="btn btn-xs btn-info pull-right">Agregar</button>
 					</div>
 					<div class="form-group" style="margin:5px;">
 						<input type="text" class="form-control" v-model="searchString">
@@ -91,7 +91,8 @@
 			<div class="col-md-8" v-if="contactSelected!=null">
 				<div class="row">
 					<div class="col-md-6">
-						<h2>{{contactSelected.nombre}}</h2>
+						<img src="http://visualoop.com/wp-content/themes/visualoop/img/there-is-no-picture-for-this-user2.png" class="img-responsive" style="margin: 0 auto;">
+						<h2 class="text-center">{{contactSelected.nombre}}</h2>
 						<ul class="list-group">
 							<li class="list-group-item">{{contactSelected.correo}}</li>
 							<li class="list-group-item">{{contactSelected.telefono}}</li>
@@ -99,14 +100,16 @@
 							<li class="list-group-item">{{contactSelected.empresa}}</li>
 						</ul>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6" style="max-height:550px;overflow-y:scroll;">
 						<div v-if="contactSelected.publicaciones.length > 0">
-							<fieldset v-for="post in contactSelected.publicaciones">
-								<legend>{{ post.title }}</legend>
-								<p>
-									{{post.body}}
-								</p>
-							</fieldset>
+							<div class="list-group">
+								<div class="list-group-item" v-for="post in contactSelected.publicaciones">
+									<h4 class="list-group-item-heading">{{ post.title }}</h4>
+									<p class="list-group-item-text">
+										{{post.body}}
+									</p>
+								</div>
+							</div>
 						</div>
 						<div v-else>
 							<fieldset>
