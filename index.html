@@ -68,7 +68,7 @@
 			<div class="col-md-4" style="max-height:550px;overflow-y:scroll;">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Contactos <button type="button" class="btn btn-xs btn-info pull-right">Agregar</button>
+						Contactos <button type="button" class="btn btn-xs btn-info pull-right" data-toggle="modal" data-target="#myModal">Agregar</button>
 					</div>
 					<div class="form-group" style="margin:5px;">
 						<input type="text" class="form-control" v-model="searchString">
@@ -131,33 +131,33 @@
 				</div>
 			</div>
 		</div>
-		<!--<table>
-			<tr>
-				<td>Nombre: </td>
-				<td><input type="text" v-model="newContact.nombre"></td>
-			</tr>
-			<tr>
-				<td>Correo: </td>
-				<td><input type="text" v-model="newContact.correo"></td>
-			</tr>
-			<tr>
-				<td>Telefono: </td>
-				<td><input type="text" v-model="newContact.telefono"></td>
-			</tr>
-			<tr>
-				<td>Paginaweb: </td>
-				<td><input type="text" v-model="newContact.paginaweb"></td>
-			</tr>
-			<tr>
-				<td>Empresa: </td>
-				<td><input type="text" v-model="newContact.empresa"></td>
-			</tr>
-		</table>
-		<button v-if="newContact!=null" v-on:click="createContact(lastID)">Agregar Contacto</button>
-		<hr>-->
-		<!--<pre>
-			{{ $data | json }}
-		</pre>-->
+	</div>
+	<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Agregar Contacto</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<span>Nombre: </span>
+						<input type="text" v-model="newContact.nombre" class="form-control">
+						<span>Correo: </span>
+						<input type="text" v-model="newContact.correo" class="form-control">
+						<span>Telefono: </span>
+						<input type="text" v-model="newContact.telefono" class="form-control">
+						<span>Paginaweb: </span>
+						<input type="text" v-model="newContact.paginaweb" class="form-control">
+						<span>Empresa: </span>
+						<input type="text" v-model="newContact.empresa" class="form-control">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary"  v-if="newContact!=null" v-on:click="createContact(lastID)">Agregar contacto</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="node_modules/vue-resource/dist/vue-resource.js"></script>

@@ -1,4 +1,4 @@
-new Vue({
+var vm = new Vue({
 	el: '#app',
 	data: {
 		messagePrimary: "Directorio Telefónico",
@@ -86,6 +86,12 @@ new Vue({
 		},
 		deleteContact: function(index){
 			this.contacts.splice(index,1);
+		},
+		resetNewContact: function(){
+			this.newContact = null;
 		}
 	}
-})
+});
+$("#myModal").on("hidden.bs.modal", function () {
+	vm.resetNewContact();
+});
