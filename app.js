@@ -1,8 +1,20 @@
+//Transitions:
+Vue.transition('msjfade', {
+	enterClass: 'fadeIn',
+	leaveClass: 'slideOutRight'
+});
+Vue.transition('displaying', {
+	enterClass: 'flipInX',
+	leaveClass: 'flipOutX'
+});
+Vue.transition('details', {
+	enterClass: 'slideInRight',
+	leaveClass: 'slideOutRight'
+});
 //Model data
 var myModel = {
 	messagePrimary: "Directorio Telefónico",
 	contacts: {},
-	updating: false,
 };
 //Component
 Vue.component("list-contacts",{
@@ -11,10 +23,16 @@ Vue.component("list-contacts",{
 		return {
 			newContact: null,
 			searchString: "",
-			contactSelected: null
+			contactSelected: null,
+			showMsjFade: false,
+			showContactSelected: false
 		}
 	},
 	props: ["contacts"],
+	ready: function(){
+		this.showMsjFade = true;
+		this.showContactSelected = false;
+	},
 	methods:{
 		save: function(data){
 			this.contacts.push(data);
@@ -39,6 +57,10 @@ Vue.component("list-contacts",{
 		},
 		readContact: function(data){
 			this.contactSelected = data;
+			
+			this.showMsjFade = false;
+			this.showContactSelected = true;
+
 			if(this.contactSelected.publicaciones.length <= 0){
 				this.$http.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
 				.then(function (response){

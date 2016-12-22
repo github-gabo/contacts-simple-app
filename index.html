@@ -4,6 +4,7 @@
 	<title>Directorio Telefónico</title>
 	<link rel="icon" href="logo.png" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="node_modules/animate.css/animate.min.css">
 </head>
 <body id="app">
 	<nav class="navbar navbar-inverse  navbar-static-top">
@@ -26,7 +27,7 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 	<div class="container">
-		<list-contacts v-bind:contacts="contacts" />
+		<list-contacts v-bind:contacts="contacts"></list-contacts>
 	</div>
 	<template id="listContacts">
 		<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
@@ -67,7 +68,7 @@
 					</div>
 					<div class="panel-body" style="padding:1px !important;">
 						<div class="list-group" style="margin:0px;">
-							<a v-on:click="readContact(contact)" class="list-group-item" v-for="contact in filteredContacts">
+							<a v-on:click="readContact(contact)" class="list-group-item animated" v-for="contact in filteredContacts" transition="displaying" stagger="50">
 								<h4 class="list-group-item-heading">{{contact.nombre}}</h4>
 								<p class="list-group-item-text">
 									<button v-on:click="deleteContact($index)">X</button>
@@ -78,7 +79,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-8" v-if="contactSelected!=null">
+			<div class="col-md-8 animated" v-show="showContactSelected" transition="details">
 				<div class="row">
 					<div class="col-md-6">
 						<img src="http://visualoop.com/wp-content/themes/visualoop/img/there-is-no-picture-for-this-user2.png" class="img-responsive" style="margin: 0 auto;">
@@ -93,7 +94,7 @@
 					<div class="col-md-6" style="max-height:550px;overflow-y:scroll;">
 						<div v-if="contactSelected.publicaciones.length > 0">
 							<div class="list-group">
-								<div class="list-group-item" v-for="post in contactSelected.publicaciones">
+								<div class="list-group-item animated" v-for="post in contactSelected.publicaciones" transition="displaying" stagger="10">
 									<h4 class="list-group-item-heading">{{ post.title }}</h4>
 									<p class="list-group-item-text">
 										{{post.body}}
@@ -110,7 +111,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-8" v-else>
+			<div class="col-md-8 animated" v-show="showMsjFade" transition="msjfade">
 				<div class="jumbotron text-center">
 					<img src="http://vue-newsletter.com/vue-newsletter.png" class="img-responsive">
 					<h2>{{messagePrimary}}</h2>
