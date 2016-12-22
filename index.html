@@ -64,6 +64,36 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 	<div class="container">
+		<list-contacts v-bind:contacts="contacts" />
+	</div>
+	<template id="listContacts">
+		<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">Agregar Contacto</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<span>Nombre: </span>
+							<input type="text" v-model="newContact.nombre" class="form-control">
+							<span>Correo: </span>
+							<input type="text" v-model="newContact.correo" class="form-control">
+							<span>Telefono: </span>
+							<input type="text" v-model="newContact.telefono" class="form-control">
+							<span>Paginaweb: </span>
+							<input type="text" v-model="newContact.paginaweb" class="form-control">
+							<span>Empresa: </span>
+							<input type="text" v-model="newContact.empresa" class="form-control">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-primary"  v-if="newContact!=null" v-on:click="createContact(lastID)">Agregar contacto</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-4" style="max-height:550px;overflow-y:scroll;">
 				<div class="panel panel-default">
@@ -84,8 +114,6 @@
 							</a>
 						</div>
 					</div>
-				</div>
-				<div id="lista">
 				</div>
 			</div>
 			<div class="col-md-8" v-if="contactSelected!=null">
@@ -131,34 +159,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel">Agregar Contacto</h4>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<span>Nombre: </span>
-						<input type="text" v-model="newContact.nombre" class="form-control">
-						<span>Correo: </span>
-						<input type="text" v-model="newContact.correo" class="form-control">
-						<span>Telefono: </span>
-						<input type="text" v-model="newContact.telefono" class="form-control">
-						<span>Paginaweb: </span>
-						<input type="text" v-model="newContact.paginaweb" class="form-control">
-						<span>Empresa: </span>
-						<input type="text" v-model="newContact.empresa" class="form-control">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary"  v-if="newContact!=null" v-on:click="createContact(lastID)">Agregar contacto</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	</template>
+
 	<script type="text/javascript" src="node_modules/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="node_modules/vue-resource/dist/vue-resource.js"></script>
 	<script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>

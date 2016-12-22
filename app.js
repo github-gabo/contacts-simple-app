@@ -1,12 +1,54 @@
-var vm = new Vue({
-	el: '#app',
-	data: {
-		messagePrimary: "Directorio Telefónico",
-		searchString: "",
-		contacts: {},
-		updating: false,
-		newContact: null,
-		contactSelected: null
+//Model data
+var myModel = {
+	messagePrimary: "Directorio Telefónico",
+	contacts: {},
+	updating: false,
+};
+//Component
+Vue.component("list-contacts",{
+	template: '#listContacts',
+	data: function(){
+		return {
+			newContact: null,
+			searchString: "",
+			contactSelected: null
+		}
+	},
+	props: ["contacts"],
+	methods:{
+		save: function(data){
+			this.contacts.push(data);
+			return true;
+		},
+		createContact: function(id){
+			var data = {
+				id: id,
+				nombre: this.newContact.nombre,
+				correo: this.newContact.correo,
+				telefono: this.newContact.telefono,
+				paginaweb: this.newContact.paginaweb,
+				empresa: this.newContact.empresa,
+				publicaciones: []
+			}
+			if(this.save(data)){
+				this.newContact = null;
+				$("#myModal").modal("toggle");
+			}else{
+				alert("Hubo un error");
+			}
+		},
+		readContact: function(data){
+			this.contactSelected = data;
+			if(this.contactSelected.publicaciones.length <= 0){
+				this.$http.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
+				.then(function (response){
+					this.contactSelected.publicaciones = response.body;
+				});
+			}
+		},
+		deleteContact: function(index){
+			this.contacts.splice(index,1);
+		}
 	},
 	computed:{
 		lastID: function(){
@@ -34,10 +76,14 @@ var vm = new Vue({
                     return item;
                 }
             })
-            // Return an array with the filtered data.
             return contacts_array;
 		}
-	},
+	}
+});
+//Vue Instance
+var vm = new Vue({
+	el: '#app',
+	data: myModel,
 	created: function () {
 		this.$http.get('https://jsonplaceholder.typicode.com/users')
 		.then(function (response){
@@ -55,38 +101,6 @@ var vm = new Vue({
 		});
 	},
 	methods:{
-		save: function(data){
-			this.contacts.push(data);
-			return true;
-		},
-		createContact: function(id){
-			var data = {
-				id: id,
-				nombre: this.newContact.nombre,
-				correo: this.newContact.correo,
-				telefono: this.newContact.telefono,
-				paginaweb: this.newContact.paginaweb,
-				empresa: this.newContact.empresa,
-				publicaciones: []
-			}
-			if(this.save(data))
-				this.newContact = null;
-			else{
-				alert("Hubo un error");
-			}
-		},
-		readContact: function(data){
-			this.contactSelected = data;
-			if(this.contactSelected.publicaciones.length <= 0){
-				this.$http.get("https://jsonplaceholder.typicode.com/posts"+"?userId="+data.id)
-				.then(function (response){
-					this.contactSelected.publicaciones = response.body;
-				});
-			}
-		},
-		deleteContact: function(index){
-			this.contacts.splice(index,1);
-		},
 		resetNewContact: function(){
 			this.newContact = null;
 		}
