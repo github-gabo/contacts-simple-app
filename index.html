@@ -27,7 +27,7 @@
 		</div><!-- /.container-fluid -->
 	</nav>
 	<div class="container">
-		<list-contacts v-bind:contacts="contacts"></list-contacts>
+		<list-contacts v-bind:contacts="contacts" v-bind:posts="true" v-bind:data_item="true" v-bind:filter="true"></list-contacts>
 	</div>
 	<template id="listContacts">
 		<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
@@ -63,25 +63,25 @@
 					<div class="panel-heading">
 						Contactos <button type="button" class="btn btn-xs btn-info pull-right" data-toggle="modal" data-target="#myModal">Agregar</button>
 					</div>
-					<div class="form-group" style="margin:5px;">
+					<div class="form-group" style="margin:5px;" v-if="filter">
 						<input type="text" class="form-control" v-model="searchString">
 					</div>
 					<div class="panel-body" style="padding:1px !important;">
 						<div class="list-group" style="margin:0px;">
-							<a v-on:click="readContact(contact)" class="list-group-item animated" v-for="contact in filteredContacts" transition="displaying" stagger="50">
-								<h4 class="list-group-item-heading">{{contact.nombre}}</h4>
+							<div class="list-group-item animated" v-for="contact in filteredContacts" transition="displaying" stagger="50">
+								<h4 class="list-group-item-heading" v-on:click="readContact(contact)">{{contact.nombre}}</h4>
 								<p class="list-group-item-text">
 									<button v-on:click="deleteContact($index)">X</button>
 									<i>{{contact.correo}}</i>
 								</p>
-							</a>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-8 animated" v-show="showContactSelected" transition="details">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-6" v-if="data_item">
 						<img src="http://visualoop.com/wp-content/themes/visualoop/img/there-is-no-picture-for-this-user2.png" class="img-responsive" style="margin: 0 auto;">
 						<h2 class="text-center">{{contactSelected.nombre}}</h2>
 						<ul class="list-group">
@@ -91,7 +91,7 @@
 							<li class="list-group-item">{{contactSelected.empresa}}</li>
 						</ul>
 					</div>
-					<div class="col-md-6" style="max-height:550px;overflow-y:scroll;">
+					<div class="col-md-6" style="max-height:550px;overflow-y:scroll;" v-if="posts">
 						<div v-if="contactSelected.publicaciones.length > 0">
 							<div class="list-group">
 								<div class="list-group-item animated" v-for="post in contactSelected.publicaciones" transition="displaying" stagger="10">

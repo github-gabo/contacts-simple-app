@@ -1,15 +1,15 @@
 //Transitions:
 Vue.transition('msjfade', {
 	enterClass: 'fadeIn',
-	leaveClass: 'slideOutRight'
+	leaveClass: 'fadeOut'
 });
 Vue.transition('displaying', {
 	enterClass: 'flipInX',
 	leaveClass: 'flipOutX'
 });
 Vue.transition('details', {
-	enterClass: 'slideInRight',
-	leaveClass: 'slideOutRight'
+	enterClass: 'fadeIn',
+	leaveClass: 'fadeOut'
 });
 //Model data
 var myModel = {
@@ -28,7 +28,7 @@ Vue.component("list-contacts",{
 			showContactSelected: false
 		}
 	},
-	props: ["contacts"],
+	props: ["contacts","posts","data_item","filter"],
 	ready: function(){
 		this.showMsjFade = true;
 		this.showContactSelected = false;
